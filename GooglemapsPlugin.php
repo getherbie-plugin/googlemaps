@@ -22,19 +22,30 @@ class GooglemapsPlugin extends Herbie\Plugin
     private static $instances = 0;
 
     /**
-     * @var Twig_Environment
+     * @return array
      */
-    private $twig;
-
-    /**
-     * @param Herbie\Event $event
-     */
-    public function onTwigInitialized(Herbie\Event $event)
+    public function getSubscribedEvents()
     {
-        $this->twig = $event['twig'];
-        $this->twig->addFunction(
-            new Twig_SimpleFunction('googlemaps', [$this, 'googleMaps'], ['is_safe' => ['html']])
+        $events = [];
+        if ((bool)$this->config('plugins.config.googlemaps.twig', false)) {
+            $events[] = 'onTwigInitialized';
+        }
+        if ((bool)$this->config('plugins.config.googlemaps.shortcode', true)) {
+            $events[] = 'onShortcodeInitialized';
+        }
+        return $events;
+    }
+
+    public function onTwigInitialized($twig)
+    {
+        $twig->addFunction(
+            new Twig_SimpleFunction('googlemaps', [$this, 'googlemapsTwig'], ['is_safe' => ['html']])
         );
+    }
+
+    public function onShortcodeInitialized($shortcode)
+    {
+        $shortcode->add('googlemaps', [$this, 'googlemapsShortcode']);
     }
 
     /**
@@ -47,14 +58,14 @@ class GooglemapsPlugin extends Herbie\Plugin
      * @param string $address
      * @return string
      */
-    public function googleMaps($id = 'gmap', $width = 600, $height = 450, $type = 'roadmap', $class = 'gmap', $zoom = 15, $address = '')
+    public function googlemapsTwig($id = 'gmap', $width = 600, $height = 450, $type = 'roadmap', $class = 'gmap', $zoom = 15, $address = '')
     {
         self::$instances++;
         $template = $this->config->get(
             'plugins.config.googlemaps.template',
             '@plugin/googlemaps/templates/googlemaps.twig'
         );
-        return $this->twig->render($template, [
+        return $this->render($template, [
                 'id' => $id . '-' . self::$instances,
                 'width' => $width,
                 'height' => $height,
@@ -65,4 +76,23 @@ class GooglemapsPlugin extends Herbie\Plugin
                 'instances' => self::$instances
         ]);
     }
+
+    /**
+     * @param array $options
+     * @return string
+     */
+    public function googlemapsShortcode($options)
+    {
+        $options = $this->initOptions([
+            'id' => 'gmap',
+            'width' => 600,
+            'height' => 450,
+            'type' => 'roadmap',
+            'class' => 'gmap',
+            'zoom' => 15,
+            'address' => '',
+        ], $options);
+        return call_user_func_array([$this, 'googlemapsTwig'], $options);
+    }
+
 }
