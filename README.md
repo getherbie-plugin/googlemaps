@@ -36,7 +36,7 @@ Anwendung
 
 Nach der Installation steht dir ein Shortcode `googlemaps` zur Verfügung. Diesen rufst du wie folgt auf:
 
-    [[googlemaps id="gmap" width="600 height="450" type="roadmap" class="gmap" zoom="15" address="Baslerstrasse 8048 Zürich"]]
+    [googlemaps id="gmap" width="600 height="450" type="roadmap" class="gmap" zoom="15" address="Baslerstrasse 8048 Zürich"]
 
 
 Wenn du die Twig-Funktion aktivierst, steht dir eine solche auch für Layout-Dateien zur Verfügung: 
