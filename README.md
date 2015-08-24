@@ -20,8 +20,7 @@ Danach aktivierst du das Plugin in der Konfigurationsdatei.
             - googlemaps
 
 
-Konfiguration
--------------
+## Konfiguration
 
 Unter *plugins.config.googlemaps* stehen dir die folgenden Optionen zur Verfügung:
 
@@ -35,8 +34,7 @@ Unter *plugins.config.googlemaps* stehen dir die folgenden Optionen zur Verfügu
     twig: false                                            
 
 
-Anwendung
----------
+## Anwendung
 
 Nach der Installation steht dir ein Shortcode `googlemaps` zur Verfügung. Diesen rufst du wie folgt auf:
 
@@ -53,8 +51,7 @@ Die Funktion kannst du auch mit benannten Argumenten aufrufen.
     {{ googlemaps(address="Baslerstrasse 8048 Zürich", type="roadmap") }}
 
 
-Parameter
----------
+## Parameter
 
 Name        | Beschreibung                              | Typ       | Default
 :---------- | :---------------------------------------- | :-------- | :------
